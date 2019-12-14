@@ -1,39 +1,43 @@
 #!/usr/bin/env python3
+import re
 from sys import exit
-from numpy import arange
 
 def check_num(num):
+
     snum = str(num)
-    f1 = [False for _ in range(len(snum) - 1)]
-    f2 = f1.copy()
+
     if len(snum) != 6:
         raise RuntimeError("Number must have 6 digits!")
-    for i, d in enumerate(snum):
-        if i == len(snum) - 1:
-            break
-        else:
-            if snum[i] > snum[i + 1]:
-                continue
-            elif snum[i] == snum[i + 1]:
-                f1[i] = True
-                f2[i] = True
-            else:
-                f1[i] = True
 
-    return (all(f1) and any(f2))
+    for i in range(len(snum) - 1):
+        if snum[i + 1] < snum[i]:
+            return False
+    return True
 
-pwd_range = arange(136760, 595730 + 1)
+def check_doubles(num):
 
-## Test the stupid function
-num = input("Enter a number of 6 digits: ")
-ok = check_num(num)
-print(f"{num} is {ok}")
-exit(0)
+    snum = str(num)
+
+    matches = re.findall('00+|22+|33+|44+|55+|66+|77+|88+|99+', snum)
+
+    print(matches)
+
+    # Check that we have matched something and that the longest match is only made by 2 identical digits, not more
+    if matches and min([len(match) for match in matches]) == 2:
+        return True
+    else:
+        return False
+
+## Test the functions
+#num = input("Enter a number of 6 digits: ")
+#ok = check_num(num) and check_doubles(num)
+#print(f"{num} is {ok}")
+#exit(0)
 
 # Loop over the input range
 count = 0
-for num in pwd_range:
-    if check_num(num):
+for num in range(136760, 595730 + 1):
+    if check_num(num) and check_doubles(num):
         count += 1
 
 print(f"The nummber of valid pwd is {count}")
