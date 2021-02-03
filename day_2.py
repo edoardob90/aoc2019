@@ -3,9 +3,7 @@
 Template for Python solution
 """
 
-from aocd import submit
 import fileinput
-import sys
 
 class Intcode():
     def __init__(self, init):
